@@ -58,15 +58,32 @@ fi
 if [ ! -d "$VENV_DIR" ]; then
     echo "🔧 Creating virtual environment..."
     python3 -m venv "$VENV_DIR"
+    if [ $? -ne 0 ]; then
+        echo "❌ Error: Failed to create virtual environment."
+        exit 1
+    fi
 fi
 
 echo "🔌 Activating virtual environment..."
 source "$VENV_DIR/bin/activate"
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Failed to activate virtual environment."
+    exit 1
+fi
 
 # --- 3. INSTALL TOOLS ---
 echo "📦 Checking build tools..."
 pip install --upgrade pip -q
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Failed to upgrade pip."
+    exit 1
+fi
+
 pip install esptool -q
+if [ $? -ne 0 ]; then
+    echo "❌ Error: Failed to install esptool."
+    exit 1
+fi
 
 # --- 4. FLASH THE FIRMWARE ---
 echo "---------------------------------------"
