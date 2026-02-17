@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # --- CONFIGURATION ---
-VENV_DIR="venv"
-PORT="/dev/ttyUSB0"
-BAUD="460800"
+VENV_DIR="${VENV_DIR:-venv}"
+PORT="${PORT:-/dev/ttyUSB0}"
+BAUD="${BAUD:-460800}"
 DOWNLOAD_PAGE="https://micropython.org/download/ESP8266_GENERIC/"
 BASE_URL="https://micropython.org"
 
