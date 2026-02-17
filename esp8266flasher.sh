@@ -46,7 +46,7 @@ else
     echo "---------------------------------------"
 
     # --- USER CONFIRMATION ---
-    read -p "❓ Download this firmware and flash it? (y/n): " confirm
+    read -r -p "❓ Download this firmware and flash it? (y/n): " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
         echo "🚫 Operation cancelled by user."
         exit 0
