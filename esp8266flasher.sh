@@ -10,6 +10,12 @@ BASE_URL="https://micropython.org"
 # --- 1. DETERMINE FIRMWARE FILE ---
 if [ -n "$1" ]; then
     FIRMWARE_FILE="$1"
+
+    # Ensure filename is treated as a path (prevents argument injection)
+    if [[ "$FIRMWARE_FILE" == -* ]]; then
+        FIRMWARE_FILE="./$FIRMWARE_FILE"
+    fi
+
     if [ ! -f "$FIRMWARE_FILE" ]; then
         echo "❌ Error: File '$FIRMWARE_FILE' not found!"
         exit 1
@@ -29,6 +35,11 @@ else
 
     DOWNLOAD_URL="${BASE_URL}${RELATIVE_PATH}"
     FIRMWARE_FILE=$(basename "$RELATIVE_PATH")
+
+    # Ensure filename is treated as a path (prevents argument injection)
+    if [[ "$FIRMWARE_FILE" == -* ]]; then
+        FIRMWARE_FILE="./$FIRMWARE_FILE"
+    fi
 
     echo "---------------------------------------"
     echo "✅ Found latest version: $FIRMWARE_FILE"
