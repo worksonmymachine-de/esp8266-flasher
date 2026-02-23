@@ -9,6 +9,13 @@ BASE_URL="https://micropython.org"
 
 # --- FUNCTIONS ---
 
+# Ensures the firmware file is treated as a path to prevent argument injection.
+sanitize_firmware_file() {
+    if [[ "$FIRMWARE_FILE" == -* ]]; then
+        FIRMWARE_FILE="./$FIRMWARE_FILE"
+    fi
+}
+
 # Determines the firmware file to use.
 # If an argument is provided, checks if it exists.
 # If not, scrapes the download page and prompts to download the latest version.
@@ -18,11 +25,7 @@ get_firmware_file() {
 
     if [ -n "$firmware_arg" ]; then
         FIRMWARE_FILE="$firmware_arg"
-
-        # Ensure filename is treated as a path (prevents argument injection)
-        if [[ "$FIRMWARE_FILE" == -* ]]; then
-            FIRMWARE_FILE="./$FIRMWARE_FILE"
-        fi
+        sanitize_firmware_file
 
         if [ ! -f "$FIRMWARE_FILE" ]; then
             echo "❌ Error: File '$FIRMWARE_FILE' not found!"
@@ -54,11 +57,7 @@ download_firmware() {
 
     local download_url="${BASE_URL}${relative_path}"
     FIRMWARE_FILE=$(basename "$relative_path")
-
-    # Ensure filename is treated as a path (prevents argument injection)
-    if [[ "$FIRMWARE_FILE" == -* ]]; then
-        FIRMWARE_FILE="./$FIRMWARE_FILE"
-    fi
+    sanitize_firmware_file
 
     echo "---------------------------------------"
     echo "✅ Found latest version: $FIRMWARE_FILE"
