@@ -109,13 +109,19 @@ setup_venv() {
 # Installs required Python dependencies in the virtual environment.
 install_dependencies() {
     echo "📦 Checking build tools..."
-    pip install --upgrade pip -q
+    if python3 -m pip show esptool > /dev/null 2>&1; then
+        echo "✅ Dependencies already installed."
+        return 0
+    fi
+
+    echo "⬇️  Installing dependencies..."
+    python3 -m pip install --upgrade pip -q
     if [ $? -ne 0 ]; then
         echo "❌ Error: Failed to upgrade pip."
         return 1
     fi
 
-    pip install esptool -q
+    python3 -m pip install esptool -q
     if [ $? -ne 0 ]; then
         echo "❌ Error: Failed to install esptool."
         return 1
