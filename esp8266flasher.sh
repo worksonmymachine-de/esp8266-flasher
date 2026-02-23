@@ -41,6 +41,25 @@ get_firmware_file() {
 # Sets the global variable FIRMWARE_FILE.
 download_firmware() {
     echo "🔍 No firmware file provided."
+
+    # Check for local firmware files first
+    local latest_local_firmware
+    latest_local_firmware=$(ls -1 ESP8266_GENERIC-*.bin 2>/dev/null | sort | tail -n 1)
+
+    if [ -n "$latest_local_firmware" ]; then
+        echo "📂 Found local firmware: $latest_local_firmware"
+        local use_local
+        read -r -p "❓ Use this local version? (y/n - check for updates): " use_local
+        if [[ "$use_local" == "y" || "$use_local" == "Y" ]]; then
+            FIRMWARE_FILE="$latest_local_firmware"
+            # Ensure filename is treated as a path (prevents argument injection)
+            if [[ "$FIRMWARE_FILE" == -* ]]; then
+                FIRMWARE_FILE="./$FIRMWARE_FILE"
+            fi
+            return 0
+        fi
+    fi
+
     echo "🌐 Scraping $DOWNLOAD_PAGE for the latest release..."
     
     # Extract relative path, ensuring no trailing quotes or garbage
