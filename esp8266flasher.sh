@@ -134,9 +134,6 @@ flash_firmware() {
     echo "📍 PORT:     $port"
     echo "---------------------------------------"
 
-    echo "🧹 Erasing flash memory..."
-    python -m esptool --port "$port" --baud "$baud" erase-flash
-
     echo "✍️  Writing firmware..."
     python -m esptool --port "$port" --baud "$baud" write-flash --flash_size=detect -fm dout 0 "$firmware_file"
 
